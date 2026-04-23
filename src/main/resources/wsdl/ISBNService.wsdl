@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:s="http://www.w3.org/2001/XMLSchema"
+             xmlns:tns="http://webservices.daehosting.com/ISBN"
+             targetNamespace="http://webservices.daehosting.com/ISBN"
+             name="ISBNService">
+
+  <types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webservices.daehosting.com/ISBN">
+      <s:element name="IsValidISBN13">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sISBN" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsValidISBN13Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IsValidISBN13Result" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsValidISBN10">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sISBN" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsValidISBN10Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IsValidISBN10Result" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </types>
+
+  <message name="IsValidISBN13SoapIn">
+    <part name="parameters" element="tns:IsValidISBN13"/>
+  </message>
+  <message name="IsValidISBN13SoapOut">
+    <part name="parameters" element="tns:IsValidISBN13Response"/>
+  </message>
+  <message name="IsValidISBN10SoapIn">
+    <part name="parameters" element="tns:IsValidISBN10"/>
+  </message>
+  <message name="IsValidISBN10SoapOut">
+    <part name="parameters" element="tns:IsValidISBN10Response"/>
+  </message>
+
+  <portType name="ISBNServiceSoapType">
+    <operation name="IsValidISBN13">
+      <input message="tns:IsValidISBN13SoapIn"/>
+      <output message="tns:IsValidISBN13SoapOut"/>
+    </operation>
+    <operation name="IsValidISBN10">
+      <input message="tns:IsValidISBN10SoapIn"/>
+      <output message="tns:IsValidISBN10SoapOut"/>
+    </operation>
+  </portType>
+
+  <binding name="ISBNServiceSoap" type="tns:ISBNServiceSoapType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="IsValidISBN13">
+      <soap:operation soapAction="http://webservices.daehosting.com/ISBN/IsValidISBN13" style="document"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+    <operation name="IsValidISBN10">
+      <soap:operation soapAction="http://webservices.daehosting.com/ISBN/IsValidISBN10" style="document"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+  </binding>
+
+  <service name="ISBNService">
+    <documentation>DataFlex Web Service to validate ISBN numbers.</documentation>
+    <port name="ISBNServiceSoap" binding="tns:ISBNServiceSoap">
+      <soap:address location="https://webservices.daehosting.com/services/isbnservice.wso"/>
+    </port>
+  </service>
+</definitions>
