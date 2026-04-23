@@ -1,24 +1,21 @@
-# Cliente SOAP para validação de ISBN (Java)
+# Cliente SOAP para NumberConversion (Java)
 
-Este projeto implementa um cliente SOAP para o serviço de validação de ISBN citado no tutorial.
+Este projeto mostra um cliente SOAP no estilo RPC para a operação `NumberToWords`.
 
-## Como funciona
-
-- `App` representa a aplicação cliente.
-- `IsbnSoapStub` representa o **stub do cliente**: encapsula envio/recebimento SOAP e expõe métodos locais:
-  - `isValidIsbn10(String isbn)`
-  - `isValidIsbn13(String isbn)`
-
-Assim, o código cliente invoca métodos Java locais enquanto o stub cuida dos detalhes de rede e XML.
-
-## Executando
+## Executar
 
 ```bash
-./gradlew run
+gradle run --no-daemon
+```
+
+Saída esperada no exemplo do tutorial:
+
+```text
+1001: one thousand one
 ```
 
 ## Arquivos principais
 
 - `src/main/java/org/example/App.java`
-- `src/main/java/org/example/IsbnSoapStub.java`
-- `src/main/resources/wsdl/ISBNService.wsdl`
+- `src/main/java/org/example/NumberConversionSoapStub.java`
+- `src/main/resources/wsdl/NumberConversion.wsdl`

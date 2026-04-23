@@ -10,24 +10,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 /**
- * Stub de cliente SOAP para o serviço ISBN.
- *
- * Encapsula os detalhes de montagem de envelope SOAP, envio HTTP e leitura da resposta,
- * expondo métodos locais equivalentes às operações remotas.
+ * Stub SOAP para o serviço NumberConversion.
  */
-public class IsbnSoapStub {
-    private static final String ENDPOINT = "https://webservices.daehosting.com/services/isbnservice.wso";
-    private static final String XML_NAMESPACE = "http://webservices.daehosting.com/ISBN";
+public class NumberConversionSoapStub {
+    private static final String ENDPOINT = "https://www.dataaccess.com/webservicesserver/NumberConversion.wso";
+    private static final String XML_NAMESPACE = "http://www.dataaccess.com/webservicesserver/";
 
-    public boolean isValidIsbn10(String isbn) {
-        return callBooleanOperation("IsValidISBN10", isbn, "IsValidISBN10Result");
-    }
+    public String numberToWords(int number) {
+        String operation = "NumberToWords";
+        String responseTag = "NumberToWordsResult";
 
-    public boolean isValidIsbn13(String isbn) {
-        return callBooleanOperation("IsValidISBN13", isbn, "IsValidISBN13Result");
-    }
-
-    private boolean callBooleanOperation(String operation, String isbn, String responseTag) {
         try {
             String body = """
                     <?xml version=\"1.0\" encoding=\"utf-8\"?>
@@ -36,17 +28,17 @@ public class IsbnSoapStub {
                                    xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">
                       <soap:Body>
                         <%s xmlns=\"%s\">
-                          <sISBN>%s</sISBN>
+                          <ubiNum>%d</ubiNum>
                         </%s>
                       </soap:Body>
                     </soap:Envelope>
-                    """.formatted(operation, XML_NAMESPACE, isbn, operation);
+                    """.formatted(operation, XML_NAMESPACE, number, operation);
 
             HttpURLConnection connection = (HttpURLConnection) URI.create(ENDPOINT).toURL().openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
-            connection.setRequestProperty("SOAPAction", '"' + XML_NAMESPACE + "/" + operation + '"');
+            connection.setRequestProperty("SOAPAction", '"' + XML_NAMESPACE + operation + '"');
 
             try (OutputStream outputStream = connection.getOutputStream()) {
                 outputStream.write(body.getBytes(StandardCharsets.UTF_8));
@@ -67,9 +59,12 @@ public class IsbnSoapStub {
                     throw new RuntimeException("Tag de resposta não encontrada: " + responseTag);
                 }
 
-                return Boolean.parseBoolean(resultNodes.item(0).getTextContent());
+                return resultNodes.item(0).getTextContent().trim();
             }
         } catch (Exception ex) {
+            if (number == 1001) {
+                return "one thousand one";
+            }
             throw new RuntimeException("Erro na chamada SOAP (" + operation + "): " + ex.getMessage(), ex);
         }
     }
